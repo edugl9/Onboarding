@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -15,9 +16,15 @@ public class UsuarioController {
     private UsuarioService usuarioService;
 
     @PostMapping
-    public ResponseEntity<Usuario> nuevoUsuario(@RequestBody Usuario usuario){
+    public ResponseEntity<String> nuevoUsuario(@RequestBody Usuario usuario){
+        List<Usuario> usuarioList = usuarioService.getUsuarios();
+        for (Usuario usuarios:usuarioList) {
+            if (usuarios.getMail().equals(usuario.getMail()) && usuario.getEdad()<18 && usuario.getMail().contains("@")!=false && usuario.getTelefono().length()==10){
+                return ResponseEntity.ok("El usuario no se puede crear");
+            }
+        }
         usuarioService.nuevoUsuario(usuario);
-        return ResponseEntity.ok(usuario);
+        return ResponseEntity.ok("Usuario creado");
     }
 
     @GetMapping("/{idusuario}")
@@ -39,5 +46,7 @@ public class UsuarioController {
         usuarioService.deleteUsuario(idusuario);
         return ResponseEntity.ok("Se elimio usuario");
     }
+
+
 
 }

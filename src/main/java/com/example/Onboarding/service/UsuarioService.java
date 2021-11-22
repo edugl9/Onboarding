@@ -5,6 +5,7 @@ import com.example.Onboarding.repository.UsuarioRepositoryDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -27,5 +28,9 @@ public class UsuarioService {
 
     public void deleteUsuario(Integer idusuario) {
         usuarioRepositoryDao.deleteById(idusuario);
+    }
+
+    public List<Usuario> getUsuarios() {
+        return (List<Usuario>) usuarioRepositoryDao.findAll();
     }
 }
