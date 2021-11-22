@@ -19,7 +19,7 @@ public class UsuarioController {
     public ResponseEntity<String> nuevoUsuario(@RequestBody Usuario usuario){
         List<Usuario> usuarioList = usuarioService.getUsuarios();
         for (Usuario usuarios:usuarioList) {
-            if (usuarios.getMail().equals(usuario.getMail()) && usuario.getEdad()<18 && usuario.getMail().contains("@")!=false && usuario.getTelefono().length()==10){
+            if (usuarios.getMail().equals(usuario.getMail()) || usuario.getEdad()<18 || usuario.getMail().contains("@")==false || usuario.getTelefono().length()!=10 || usuario.getContrasena().matches("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{6,20}$")==false) {
                 return ResponseEntity.ok("El usuario no se puede crear");
             }
         }
