@@ -1,6 +1,7 @@
 package com.example.Onboarding.service;
 
 import com.example.Onboarding.entity.Usuario;
+import com.example.Onboarding.repository.AuthRepository;
 import com.example.Onboarding.repository.UsuarioRepositoryDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

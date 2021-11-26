@@ -19,7 +19,7 @@ public class UsuarioController {
     public ResponseEntity<String> nuevoUsuario(@RequestBody Usuario usuario){
         List<Usuario> usuarioList = usuarioService.getUsuarios();
         for (Usuario usuarios:usuarioList) {
-            if (usuarios.getMail().equals(usuario.getMail()) || usuario.getEdad()<18 || usuario.getMail().contains("@")==false || usuario.getTelefono().length()!=10 || usuario.getContrasena().matches("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{6,20}$")==false) {
+            if (usuarios.getEmail().equals(usuario.getEmail()) || usuario.getEdad()<18 || !usuario.getEmail().contains("@") || usuario.getTelefono().length()!=10 || !usuario.getPassword().matches("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{6,20}$")) {
                 return ResponseEntity.ok("El usuario no se puede crear");
             }
         }
@@ -34,9 +34,9 @@ public class UsuarioController {
 
     @PutMapping("/update")
     public ResponseEntity<String> updateUsuario(@RequestBody Usuario usuario){
-        if (usuarioService.buscarUsuarioPorId(usuario.getIdusuario()).isEmpty()){
+        //if (usuarioService.buscarUsuarioPorId(usuario.getIdusuario()).isEmpty()){
             //throw new InexistenteException("Alumno no encontrado");
-        }
+        //}
         usuarioService.updateUsuario(usuario);
         return ResponseEntity.ok("Actualizacion exitosa");
     }
