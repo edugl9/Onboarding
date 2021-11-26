@@ -2,10 +2,7 @@ package com.example.Onboarding.controller;
 
 import com.example.Onboarding.DTO.LoginDTO;
 import com.example.Onboarding.DTO.SignUpDto;
-import com.example.Onboarding.config.SecurityConfig;
-import com.example.Onboarding.entity.Role;
 import com.example.Onboarding.entity.Usuario;
-import com.example.Onboarding.repository.AuthRepository;
 import com.example.Onboarding.repository.RoleRepository;
 import com.example.Onboarding.repository.UsuarioRepositoryDao;
 import com.example.Onboarding.service.UsuarioService;
@@ -19,8 +16,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collections;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -71,6 +66,42 @@ public class AuthController {
         }
         return new ResponseEntity<>("Error de Usuario", HttpStatus.ACCEPTED);
     }
+
+    @PutMapping("/changePassword/{username}/{newPassword}")
+    public ResponseEntity<?> cambioContraseña(@PathVariable ("username") String username, @PathVariable ("newPassword") String newPassword){
+        if(userRepository.existsByUsername(username)){
+           Usuario usuario = userRepository.findByUsername(username).get();
+            usuario.setPassword(passwordEncoder.encode(newPassword));
+            userRepository.save(usuario);
+
+            return new ResponseEntity<>("Contraseña cambiada exitosamente", HttpStatus.OK);
+        }
+        return new ResponseEntity<>("El usuario no existe", HttpStatus.BAD_REQUEST);
+    }
+    @PutMapping("/change-email/{username}/{email}")
+    public ResponseEntity<?> cambioEmail(@PathVariable ("username") String username, @PathVariable ("email") String newEmail){
+        if(userRepository.existsByUsername(username)){
+            Usuario usuario = userRepository.findByUsername(username).get();
+            usuario.setEmail(newEmail);
+            userRepository.save(usuario);
+
+            return new ResponseEntity<>("Email cambiado exitosamente", HttpStatus.OK);
+        }
+        return new ResponseEntity<>("El usuario no existe", HttpStatus.BAD_REQUEST);
+    }
+
+    @PutMapping("/change-telefono/{username}/{telefono}")
+    public ResponseEntity<?> cambioTelefono(@PathVariable ("username") String username, @PathVariable ("telefono") String newTelefono){
+        if(userRepository.existsByUsername(username)){
+            Usuario usuario = userRepository.findByUsername(username).get();
+            usuario.setTelefono(newTelefono);
+            userRepository.save(usuario);
+
+            return new ResponseEntity<>("Telefono cambiado exitosamente", HttpStatus.OK);
+        }
+        return new ResponseEntity<>("El usuario no existe", HttpStatus.BAD_REQUEST);
+    }
+
 
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@RequestBody SignUpDto signUpDto){
