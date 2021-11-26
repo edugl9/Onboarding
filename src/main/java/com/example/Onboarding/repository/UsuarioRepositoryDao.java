@@ -13,6 +13,6 @@ public interface UsuarioRepositoryDao extends CrudRepository<Usuario, Integer> {
     Optional<Usuario> findByUsername(String username);
     Boolean existsByUsername(String username);
     Boolean existsByEmail(String email);
-    Boolean existsByTelefono(Integer telefono);
+    Boolean existsByTelefono(String telefono);
 }
 

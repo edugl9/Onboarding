@@ -34,4 +34,8 @@ public class UsuarioService {
     public List<Usuario> getUsuarios() {
         return (List<Usuario>) usuarioRepositoryDao.findAll();
     }
+
+    public Boolean existsByTelefono(String telefono){
+        return usuarioRepositoryDao.existsByTelefono(telefono);
+    }
 }

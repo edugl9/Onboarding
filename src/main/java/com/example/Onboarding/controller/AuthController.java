@@ -8,6 +8,7 @@ import com.example.Onboarding.entity.Usuario;
 import com.example.Onboarding.repository.AuthRepository;
 import com.example.Onboarding.repository.RoleRepository;
 import com.example.Onboarding.repository.UsuarioRepositoryDao;
+import com.example.Onboarding.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,6 +39,9 @@ public class AuthController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private UsuarioService usuarioService;
+
     @PostMapping("/signin")
     public ResponseEntity<String> authenticateUser(@RequestBody LoginDTO loginDto) {
 
@@ -57,12 +61,15 @@ public class AuthController {
         return new ResponseEntity<>("Por seguridad su usuario ha sido bloqueado", HttpStatus.FORBIDDEN);
     }
 
-    @PostMapping("/unblockUser/{username}/{telefono}")
-    public ResponseEntity<String> desbloquearUsuario(@PathVariable("username") String username, @PathVariable("telefono") Integer telefono){
-        if(userRepository.existsByUsername(username) && userRepository.existsByTelefono(telefono)){
-            return new ResponseEntity<>("Su usuario a sido desbloqueado satisfactoriamente", HttpStatus.ACCEPTED);
+    @GetMapping("/unblockUser/{username}/{telefono}")
+    public ResponseEntity<String> desbloquearUsuario(@PathVariable("username") String username, @PathVariable("telefono") String telefono){
+        if(userRepository.existsByUsername(username)){
+            if(usuarioService.existsByTelefono(telefono)){
+                return new ResponseEntity<>("Usuario Desbloqueado ", HttpStatus.ACCEPTED);
+            }
+            return new ResponseEntity<>("El telefono no coincide ", HttpStatus.ACCEPTED);
         }
-        return new ResponseEntity<>("Su usuario o telefono no coinciden", HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>("Error de Usuario", HttpStatus.ACCEPTED);
     }
 
     @PostMapping("/signup")
