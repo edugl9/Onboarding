@@ -16,6 +16,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.Optional;
+
 
 @RestController
 @RequestMapping("/api/auth")
@@ -37,6 +40,11 @@ public class AuthController {
     @Autowired
     private UsuarioService usuarioService;
 
+    @GetMapping("/")
+    public List<Usuario> listaUsuarios(){
+        return (List<Usuario>) userRepository.findAll();
+    }
+
     @PostMapping("/signin")
     public ResponseEntity<String> authenticateUser(@RequestBody LoginDTO loginDto) {
 
@@ -56,7 +64,7 @@ public class AuthController {
         return new ResponseEntity<>("Por seguridad su usuario ha sido bloqueado", HttpStatus.FORBIDDEN);
     }
 
-    @GetMapping("/unblockUser/{username}/{telefono}")
+    @GetMapping("/unblock-user/{username}/{telefono}")
     public ResponseEntity<String> desbloquearUsuario(@PathVariable("username") String username, @PathVariable("telefono") String telefono){
         if(userRepository.existsByUsername(username)){
             if(usuarioService.existsByTelefono(telefono)){
@@ -67,7 +75,7 @@ public class AuthController {
         return new ResponseEntity<>("Error de Usuario", HttpStatus.ACCEPTED);
     }
 
-    @PutMapping("/changePassword/{username}/{newPassword}")
+    @PutMapping("/change-password/{username}/{newPassword}")
     public ResponseEntity<?> cambioContraseña(@PathVariable ("username") String username, @PathVariable ("newPassword") String newPassword){
         if(userRepository.existsByUsername(username)){
            Usuario usuario = userRepository.findByUsername(username).get();
